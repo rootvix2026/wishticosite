@@ -258,6 +258,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .auth-shell { min-height: calc(100vh - 88px); display: grid; place-items: center; padding: 2rem 1rem 4rem; }
 .auth-card { width: min(520px, 100%); text-align: center; }
 .auth-note, .auth-switch { margin-top: 0.75rem; }
+.auth-feedback { margin-top: 0.75rem; padding: 0.9rem 1rem; border-radius: 16px; background: rgba(195, 44, 44, 0.08); color: #9d1f1f; border: 1px solid rgba(195, 44, 44, 0.16); }
+.auth-feedback[data-state="success"] { background: rgba(39, 118, 72, 0.08); color: #1f6c3f; border-color: rgba(39, 118, 72, 0.16); }
 
 /* Product detail */
 .product-layout { grid-template-columns: 1fr 1fr; align-items: start; }

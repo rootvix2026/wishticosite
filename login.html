@@ -19,13 +19,14 @@
         <span class="eyebrow">Welcome back</span>
         <h1>Login to WISHTICO</h1>
         <p class="auth-note" id="auth-demo-note"></p>
+        <p class="auth-feedback" id="auth-feedback" hidden aria-live="polite"></p>
         <form id="login-form" class="form-grid">
           <label class="field"><span>Email</span><input name="email" type="email" required /></label>
           <label class="field password-field"><span>Password</span><input name="password" type="password" required /><button class="password-toggle" type="button" data-password-toggle>Show</button></label>
           <button class="button button-primary button-block" type="submit">Login</button>
         </form>
         <button class="button button-secondary button-block" id="google-login" type="button">Continue with Google</button>
-        <p class="auth-switch">New here? <a href="signup.html">Create account</a></p>
+        <p class="auth-switch">New here? <a id="signup-link" href="signup.html">Create account</a></p>
       </section>
     </main>
     <div data-cart-drawer></div>

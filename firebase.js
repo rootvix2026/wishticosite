@@ -15,10 +15,12 @@ import {
   where
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
+  browserLocalPersistence,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -49,6 +51,7 @@ export const app = isDemoMode ? null : initializeApp(firebaseConfig);
 export const db = isDemoMode ? null : getFirestore(app);
 export const auth = isDemoMode ? null : getAuth(app);
 export const storage = isDemoMode ? null : getStorage(app);
+let persistencePromise = null;
 
 const generateId = (prefix = 'item') => {
   if (globalThis.crypto?.randomUUID) return `${prefix}-${globalThis.crypto.randomUUID()}`;
@@ -65,6 +68,18 @@ const nowIso = () => new Date().toISOString();
 
 if (isDemoMode) {
   console.warn('WISHTICO is running in offline demo mode. Replace the placeholder firebaseConfig values in firebase.js to enable live Firebase data.');
+}
+
+async function ensureAuthPersistence() {
+  if (isDemoMode || !auth) return true;
+  if (!persistencePromise) {
+    persistencePromise = setPersistence(auth, browserLocalPersistence).catch((error) => {
+      console.error('Failed to enable Firebase auth persistence.', error);
+      persistencePromise = null;
+      throw error;
+    });
+  }
+  return persistencePromise;
 }
 
 function loadDemoDb() {
@@ -294,6 +309,7 @@ export async function signUp(email, password, name) {
     setDemoAuth(profile);
     return profile;
   }
+  await ensureAuthPersistence();
   const credential = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(credential.user, { displayName: name });
   await setDoc(doc(db, 'users', credential.user.uid), {
@@ -314,6 +330,7 @@ export async function signIn(email, password) {
     setDemoAuth(profile);
     return profile;
   }
+  await ensureAuthPersistence();
   const credential = await signInWithEmailAndPassword(auth, email, password);
   return credential.user;
 }
@@ -338,6 +355,7 @@ export async function signInGoogle() {
     setDemoAuth(profile);
     return profile;
   }
+  await ensureAuthPersistence();
   const credential = await signInWithPopup(auth, provider);
   const profileRef = doc(db, 'users', credential.user.uid);
   const snapshot = await getDoc(profileRef);

@@ -38,6 +38,7 @@ const params = new URLSearchParams(window.location.search);
 const GUEST_CART_KEY = 'wishtico-guest-cart';
 const COUPON_KEY = 'wishtico-coupon';
 const WISHLIST_PREFIX = 'wishtico-wishlist';
+const ADMIN_EMAILS = ['admin@wishtico.demo'];
 
 const state = {
   user: null,
@@ -50,6 +51,7 @@ const state = {
   users: [],
   cart: [],
   appliedCoupon: '',
+  appReady: false,
   collectionPage: 1,
   collectionFilters: {
     category: params.get('category') || 'All',
@@ -75,13 +77,13 @@ const navItems = [
   ['Home', 'index.html'],
   ['Collections', 'collections.html'],
   ['Reviews', 'reviews.html'],
-  ['About', 'index.html#about'],
-  ['Contact', 'index.html#contact']
+  ['About', 'about.html'],
+  ['Contact', 'contact.html']
 ];
 
 const utilityItems = [
-  ['Contact', 'index.html#contact'],
-  ['Help', 'index.html#help'],
+  ['Contact', 'contact.html'],
+  ['Help', 'contact.html#support'],
   ['Delivery Tracking', 'checkout.html#my-orders']
 ];
 
@@ -89,6 +91,9 @@ const byId = (id) => document.getElementById(id);
 const formatPrice = (value) => currency.format(Number(value || 0));
 const toSlug = (value = '') => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const normalizeEmail = (value = '') => String(value).trim().toLowerCase();
+const normalizeRole = (value = '') => String(value).trim().toLowerCase();
+const adminEmails = new Set(ADMIN_EMAILS.map(normalizeEmail));
 const averageRating = (productId) => {
   const productReviews = state.reviews.filter((review) => review.productId === productId && review.approved !== false);
   if (!productReviews.length) return 4.8;
@@ -99,6 +104,7 @@ const getDiscount = (product) => product.offerPercentage || Math.max(0, Math.rou
 const getDeliveryCharge = (subtotal) => (subtotal > 0 && subtotal < 1499 ? 99 : 0);
 const getWishlistKey = () => `${WISHLIST_PREFIX}-${state.user?.uid || 'guest'}`;
 const sameUser = (a, b) => (a?.uid || '') === (b?.uid || '') && (a?.role || '') === (b?.role || '') && (a?.name || '') === (b?.name || '');
+const isAdminUser = (profile = state.user) => normalizeRole(profile?.role) === 'admin' || adminEmails.has(normalizeEmail(profile?.email));
 const getSafeRedirect = () => {
   const candidate = params.get('redirect');
   if (!candidate) return 'index.html';
@@ -112,6 +118,44 @@ const getSafeRedirect = () => {
     return 'index.html';
   }
 };
+
+function updateHeaderBadges() {
+  const cartCount = state.cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+  const wishlistCount = getWishlistIds().length;
+  document.querySelectorAll('[data-cart-count]').forEach((node) => {
+    node.textContent = String(cartCount);
+  });
+  document.querySelectorAll('[data-wishlist-count]').forEach((node) => {
+    node.textContent = String(wishlistCount);
+  });
+}
+
+function setAuthFeedback(message = '', type = 'error') {
+  const feedback = byId('auth-feedback');
+  if (!feedback) return;
+  feedback.hidden = !message;
+  feedback.textContent = message;
+  feedback.dataset.state = message ? type : '';
+}
+
+function getFriendlyAuthMessage(error, fallback) {
+  const code = String(error?.code || error?.message || '').toLowerCase();
+  if (code.includes('wrong-password') || code.includes('invalid-credential') || code.includes('invalid-login-credentials')) return 'Incorrect email or password.';
+  if (code.includes('user-not-found')) return 'No account was found for that email address.';
+  if (code.includes('email-already-in-use')) return 'An account with this email already exists.';
+  if (code.includes('invalid-email')) return 'Please enter a valid email address.';
+  if (code.includes('weak-password')) return 'Password must be at least 6 characters long.';
+  if (code.includes('popup-closed')) return 'Google sign-in was cancelled before it finished.';
+  if (code.includes('network')) return 'A network error occurred. Please check your connection and try again.';
+  return error?.message || fallback;
+}
+
+function syncAuthSwitchLinks() {
+  const redirect = getSafeRedirect();
+  const suffix = redirect === 'index.html' ? '' : `?redirect=${encodeURIComponent(redirect)}`;
+  byId('signup-link')?.setAttribute('href', `signup.html${suffix}`);
+  byId('login-link')?.setAttribute('href', `login.html${suffix}`);
+}
 
 function showToast(message) {
   const stack = byId('toast-stack');
@@ -178,7 +222,7 @@ function renderSharedChrome() {
   const wishlistCount = getWishlistIds().length;
   const currentPath = window.location.pathname.split('/').pop() || 'index.html';
   const accountHtml = state.user
-    ? `<div class="account-menu"><button class="account-menu__toggle" type="button" data-account-toggle>Hi, ${state.user.name?.split(' ')[0] || 'User'}</button><div class="account-menu__panel"><a href="checkout.html#my-orders">My Orders</a><a href="collections.html?view=wishlist">Wishlist</a>${state.user.role === 'admin' ? '<a href="admin.html">Admin</a>' : ''}<button type="button" data-logout-button>Logout</button></div></div>`
+    ? `<div class="account-menu"><button class="account-menu__toggle" type="button" data-account-toggle>Hi, ${state.user.name?.split(' ')[0] || 'User'}</button><div class="account-menu__panel"><a href="checkout.html#my-orders">My Orders</a><a href="collections.html?view=wishlist">Wishlist</a>${isAdminUser(state.user) ? '<a href="admin.html">Admin</a>' : ''}<button type="button" data-logout-button>Logout</button></div></div>`
     : `<a href="login.html" class="utility-link">Login</a><a href="signup.html" class="utility-link">Sign Up</a>`;
 
   if (headerRoot) {
@@ -198,8 +242,8 @@ function renderSharedChrome() {
               <div class="utility-links">${accountHtml}${utilityItems.map(([label, href]) => `<a class="utility-link" href="${href}">${label}</a>`).join('')}</div>
               <div class="icon-actions">
                 <button class="icon-button" type="button" data-open-search aria-label="Search">${icon.search}</button>
-                <a class="icon-button" href="collections.html?view=wishlist" aria-label="Wishlist">${icon.heart}<span class="cart-badge">${wishlistCount}</span></a>
-                <button class="icon-button" type="button" data-open-cart aria-label="Cart">${icon.cart}<span class="cart-badge">${cartCount}</span></button>
+                <a class="icon-button" href="collections.html?view=wishlist" aria-label="Wishlist">${icon.heart}<span class="cart-badge" data-wishlist-count>${wishlistCount}</span></a>
+                <button class="icon-button" type="button" data-open-cart aria-label="Cart">${icon.cart}<span class="cart-badge" data-cart-count>${cartCount}</span></button>
                 <button class="icon-button mobile-only" type="button" data-open-mobile aria-label="Menu">${icon.menu}</button>
               </div>
             </div>
@@ -211,7 +255,7 @@ function renderSharedChrome() {
         <aside class="mobile-panel__sheet">
           <div class="mobile-panel__head"><img src="assets/images/logo-lockup.svg" alt="WISHTICO" /><button class="close-button" type="button" data-close-mobile>×</button></div>
           <nav class="mobile-nav">${navItems.map(([label, href]) => `<a href="${href}">${label}</a>`).join('')}</nav>
-          <div class="mobile-actions">${state.user ? `<a href="checkout.html#my-orders">My Orders</a><a href="collections.html?view=wishlist">Wishlist</a>${state.user.role === 'admin' ? '<a href="admin.html">Admin</a>' : ''}<button type="button" data-logout-button>Logout</button>` : `<a href="login.html">Login</a><a href="signup.html">Sign Up</a>`}${utilityItems.map(([label, href]) => `<a href="${href}">${label}</a>`).join('')}</div>
+          <div class="mobile-actions">${state.user ? `<a href="checkout.html#my-orders">My Orders</a><a href="collections.html?view=wishlist">Wishlist</a>${isAdminUser(state.user) ? '<a href="admin.html">Admin</a>' : ''}<button type="button" data-logout-button>Logout</button>` : `<a href="login.html">Login</a><a href="signup.html">Sign Up</a>`}${utilityItems.map(([label, href]) => `<a href="${href}">${label}</a>`).join('')}</div>
         </aside>
       </div>`;
   }
@@ -270,12 +314,12 @@ function renderSharedChrome() {
             <a href="login.html">Login</a>
             <a href="signup.html">Sign Up</a>
             <a href="checkout.html#my-orders">Delivery Tracking</a>
-            <a href="index.html#help">Support</a>
+            <a href="contact.html#support">Support</a>
           </div>
           <div>
             <h3>Company</h3>
-            <a href="index.html#about">About</a>
-            <a href="index.html#contact">Contact</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
             <a href="reviews.html">Reviews</a>
             <a href="admin.html">Admin</a>
           </div>
@@ -429,6 +473,7 @@ async function persistCart() {
   if (state.user?.uid) await saveCart(state.user.uid, state.cart);
   else saveGuestCart(state.cart);
   renderCartSurfaces();
+  updateHeaderBadges();
 }
 
 function addToCart(product, overrides = {}) {
@@ -469,6 +514,7 @@ function toggleWishlist(productId) {
   const ids = getWishlistIds();
   const next = ids.includes(productId) ? ids.filter((id) => id !== productId) : [...ids, productId];
   saveWishlistIds(next);
+  updateHeaderBadges();
   renderPage();
 }
 
@@ -634,15 +680,18 @@ function bindCollectionPageEvents() {
 function renderProductPage() {
   const product = state.products.find((item) => item.id === params.get('id')) || state.products[0];
   if (!product) return;
+  const images = product.images?.length ? product.images : [product.image].filter(Boolean);
+  const sizes = product.sizes?.length ? product.sizes : ['M'];
+  const colors = product.colors?.length ? product.colors : [{ name: 'Default', hex: '#0E0E0E' }];
   const reviews = state.reviews.filter((review) => review.productId === product.id && review.approved !== false);
-  byId('product-breadcrumb').textContent = `Home / Collections / ${product.category} / ${product.name}`;
-  byId('tab-description').innerHTML = `<div class="content-card"><p>${product.description}</p></div>`;
-  byId('product-review-grid').innerHTML = reviews.length ? reviews.map((review, index) => reviewCard(review, index * 80)).join('') : `<div class="empty-state"><h2>No reviews yet</h2><p>Be the first to review this product.</p></div>`;
+  byId('product-breadcrumb') && (byId('product-breadcrumb').textContent = `Home / Collections / ${product.category} / ${product.name}`);
+  byId('tab-description') && (byId('tab-description').innerHTML = `<div class="content-card"><p>${product.description}</p></div>`);
+  byId('product-review-grid') && (byId('product-review-grid').innerHTML = reviews.length ? reviews.map((review, index) => reviewCard(review, index * 80)).join('') : `<div class="empty-state"><h2>No reviews yet</h2><p>Be the first to review this product.</p></div>`);
   byId('product-detail-root').innerHTML = `
     <div class="product-layout">
       <div class="product-gallery reveal">
         <div class="product-gallery__main"><img id="product-main-image" src="${product.image}" alt="${product.name}" /></div>
-        <div class="product-gallery__thumbs">${product.images.map((image, index) => `<button type="button" data-product-thumb="${image}" class="${index === 0 ? 'is-active' : ''}"><img src="${image}" alt="${product.name} view ${index + 1}" /></button>`).join('')}</div>
+        <div class="product-gallery__thumbs">${images.map((image, index) => `<button type="button" data-product-thumb="${image}" class="${index === 0 ? 'is-active' : ''}"><img src="${image}" alt="${product.name} view ${index + 1}" /></button>`).join('')}</div>
       </div>
       <div class="product-summary reveal">
         <span class="eyebrow">${product.category}</span>
@@ -651,11 +700,11 @@ function renderProductPage() {
         <div class="price-row"><strong>${formatPrice(product.price)}</strong><s>${formatPrice(product.originalPrice)}</s><span class="pill">Save ${getDiscount(product)}%</span></div>
         <div>
           <h3>Color</h3>
-          <div class="swatch-group">${product.colors.map((color, index) => `<button class="swatch ${index === 0 ? 'is-active' : ''}" type="button" style="--swatch:${color.hex}" data-product-color="${color.hex}" data-product-color-name="${color.name}"></button>`).join('')}</div>
+          <div class="swatch-group">${colors.map((color, index) => `<button class="swatch ${index === 0 ? 'is-active' : ''}" type="button" style="--swatch:${color.hex}" data-product-color="${color.hex}" data-product-color-name="${color.name}"></button>`).join('')}</div>
         </div>
         <div>
           <h3>Size</h3>
-          <div class="chip-group">${product.sizes.map((size, index) => `<button class="chip ${index === 0 ? 'is-active' : ''}" type="button" data-product-size="${size}">${size}</button>`).join('')}</div>
+          <div class="chip-group">${sizes.map((size, index) => `<button class="chip ${index === 0 ? 'is-active' : ''}" type="button" data-product-size="${size}">${size}</button>`).join('')}</div>
         </div>
         <div>
           <h3>Quantity</h3>
@@ -668,9 +717,9 @@ function renderProductPage() {
         <div class="trust-row"><span>Free Shipping</span><span>Easy Returns</span><span>Secure Payment</span></div>
       </div>
     </div>`;
-  const selected = { size: product.sizes[0], color: product.colors[0]?.hex, colorName: product.colors[0]?.name, quantity: 1 };
+  const selected = { size: sizes[0], color: colors[0]?.hex, colorName: colors[0]?.name, quantity: 1 };
   document.querySelectorAll('[data-product-thumb]').forEach((button) => button.addEventListener('click', () => {
-    byId('product-main-image').src = button.dataset.productThumb;
+    if (byId('product-main-image')) byId('product-main-image').src = button.dataset.productThumb;
     document.querySelectorAll('[data-product-thumb]').forEach((thumb) => thumb.classList.remove('is-active'));
     button.classList.add('is-active');
   }));
@@ -687,19 +736,19 @@ function renderProductPage() {
   }));
   document.querySelectorAll('[data-product-qty]').forEach((button) => button.addEventListener('click', () => {
     selected.quantity = Math.max(1, selected.quantity + Number(button.dataset.productQty));
-    byId('product-qty').textContent = String(selected.quantity);
+    byId('product-qty') && (byId('product-qty').textContent = String(selected.quantity));
   }));
-  byId('product-add-cart').addEventListener('click', () => addToCart(product, selected));
-  byId('product-buy-now').addEventListener('click', () => {
+  byId('product-add-cart')?.addEventListener('click', () => addToCart(product, selected));
+  byId('product-buy-now')?.addEventListener('click', () => {
     addToCart(product, selected);
     window.location.href = state.user ? 'checkout.html' : `login.html?redirect=${encodeURIComponent('checkout.html')}`;
   });
-  byId('related-products').innerHTML = state.products.filter((item) => item.category === product.category && item.id !== product.id).slice(0, 4).map(productCard).join('');
+  byId('related-products') && (byId('related-products').innerHTML = state.products.filter((item) => item.category === product.category && item.id !== product.id).slice(0, 4).map(productCard).join(''));
   document.querySelectorAll('[data-tab-target]').forEach((button) => button.addEventListener('click', () => {
     document.querySelectorAll('[data-tab-target]').forEach((node) => node.classList.remove('is-active'));
     document.querySelectorAll('.tab-panel').forEach((node) => node.classList.remove('is-active'));
     button.classList.add('is-active');
-    byId(`tab-${button.dataset.tabTarget}`).classList.add('is-active');
+    byId(`tab-${button.dataset.tabTarget}`)?.classList.add('is-active');
   }));
 }
 
@@ -738,6 +787,7 @@ function renderCartSurfaces() {
   byId('cart-drawer-items') && (byId('cart-drawer-items').innerHTML = state.cart.length ? state.cart.map((item) => cartItemMarkup(item)).join('') : empty);
   byId('cart-page-items') && (byId('cart-page-items').innerHTML = state.cart.length ? state.cart.map((item) => cartItemMarkup(item)).join('') : empty);
   byId('checkout-items') && (byId('checkout-items').innerHTML = state.cart.length ? state.cart.map((item) => cartItemMarkup(item, true)).join('') : empty);
+  updateHeaderBadges();
   applyCouponAndRenderSummary('cart');
   applyCouponAndRenderSummary('checkout');
 }
@@ -849,7 +899,8 @@ function showOrderSuccess() {
 
 function passwordToggleSetup() {
   document.querySelectorAll('[data-password-toggle]').forEach((button) => button.addEventListener('click', () => {
-    const input = button.parentElement.querySelector('input');
+    const input = button.parentElement?.querySelector('input');
+    if (!input) return;
     const reveal = input.type === 'password';
     input.type = reveal ? 'text' : 'password';
     button.textContent = reveal ? 'Hide' : 'Show';
@@ -868,50 +919,101 @@ function renderAuthNote() {
 
 function renderLoginPage() {
   renderAuthNote();
+  syncAuthSwitchLinks();
   passwordToggleSetup();
+  if (state.user) {
+    window.location.replace(redirectAfterAuth());
+    return;
+  }
   if (byId('login-form')) byId('login-form').onsubmit = async (event) => {
     event.preventDefault();
     const form = readFormJson(event.currentTarget);
+    const email = String(form.email || '').trim();
+    const password = String(form.password || '');
+    if (!email || !password) {
+      setAuthFeedback('Please enter your email and password.');
+      return;
+    }
+    setAuthFeedback();
     try {
-      await signIn(form.email, form.password);
+      await signIn(email, password);
       window.location.href = redirectAfterAuth();
     } catch (error) {
-      showToast(error.message || 'Unable to login.');
+      console.error('Login failed.', error);
+      setAuthFeedback(getFriendlyAuthMessage(error, 'Unable to login.'));
     }
   };
   if (byId('google-login')) byId('google-login').onclick = async () => {
+    setAuthFeedback();
     try {
       await signInGoogle();
       window.location.href = redirectAfterAuth();
     } catch (error) {
-      showToast(error.message || 'Google sign-in failed.');
+      console.error('Google sign-in failed.', error);
+      setAuthFeedback(getFriendlyAuthMessage(error, 'Google sign-in failed.'));
     }
   };
 }
 
 function renderSignupPage() {
+  syncAuthSwitchLinks();
   passwordToggleSetup();
+  if (state.user) {
+    window.location.replace(redirectAfterAuth());
+    return;
+  }
   if (byId('signup-form')) byId('signup-form').onsubmit = async (event) => {
     event.preventDefault();
     const form = readFormJson(event.currentTarget);
+    const name = String(form.name || '').trim();
+    const email = String(form.email || '').trim();
+    const password = String(form.password || '');
+    if (!name || !email || !password) {
+      setAuthFeedback('Please complete every required field.');
+      return;
+    }
+    setAuthFeedback();
     try {
-      await signUp(form.email, form.password, form.name);
+      await signUp(email, password, name);
       window.location.href = redirectAfterAuth();
     } catch (error) {
-      showToast(error.message || 'Unable to create account.');
+      console.error('Signup failed.', error);
+      setAuthFeedback(getFriendlyAuthMessage(error, 'Unable to create account.'));
     }
   };
   if (byId('google-signup')) byId('google-signup').onclick = async () => {
+    setAuthFeedback();
     try {
       await signInGoogle();
       window.location.href = redirectAfterAuth();
     } catch (error) {
-      showToast(error.message || 'Google sign-up failed.');
+      console.error('Google sign-up failed.', error);
+      setAuthFeedback(getFriendlyAuthMessage(error, 'Google sign-up failed.'));
     }
   };
 }
 
+function renderContactPage() {
+  const form = byId('contact-form');
+  if (!form) return;
+  form.onsubmit = (event) => {
+    event.preventDefault();
+    const details = readFormJson(form);
+    const name = String(details.name || '').trim();
+    const email = String(details.email || '').trim();
+    const subject = String(details.subject || '').trim();
+    const message = String(details.message || '').trim();
+    if (!name || !email || !subject || !message) {
+      showToast('Please complete all contact form fields.');
+      return;
+    }
+    form.reset();
+    showToast('Message received. Our team will reply soon.');
+  };
+}
+
 function renderReviewsPage() {
+  if (!byId('all-reviews-grid') || !byId('review-product')) return;
   byId('all-reviews-grid').innerHTML = state.reviews.map((review, index) => reviewCard(review, index * 70)).join('');
   byId('review-product').innerHTML = `<option value="">Select a product</option>${state.products.map((product) => `<option value="${product.id}">${product.name}</option>`).join('')}`;
   if (byId('review-form')) byId('review-form').onsubmit = async (event) => {
@@ -942,10 +1044,17 @@ async function ensureAdmin() {
     window.location.href = `login.html?redirect=${encodeURIComponent('admin.html')}`;
     return false;
   }
-  const profile = await getUserProfile(state.user.uid);
-  if ((profile?.role || state.user.role) !== 'admin') {
+  let profile = null;
+  try {
+    profile = await getUserProfile(state.user.uid);
+  } catch (error) {
+    console.error('Failed to load admin profile.', error);
+  }
+  const resolvedUser = { ...state.user, ...(profile || {}) };
+  state.user = resolvedUser;
+  if (!isAdminUser(resolvedUser)) {
     showToast('Admin access only.');
-    window.location.href = 'login.html?redirect=admin.html';
+    window.location.href = 'index.html';
     return false;
   }
   return true;
@@ -1266,6 +1375,7 @@ async function renderPage() {
   if (page === 'checkout') await renderCheckoutPage();
   if (page === 'login') renderLoginPage();
   if (page === 'signup') renderSignupPage();
+  if (page === 'contact') renderContactPage();
   if (page === 'reviews') renderReviewsPage();
   if (page === 'admin') await renderAdminPage();
   initRevealAnimations();
@@ -1274,24 +1384,41 @@ async function renderPage() {
 document.addEventListener('DOMContentLoaded', async () => {
   saveCouponCode(getCouponCode());
   bindGlobalActions();
-  await loadCatalogData();
-  await syncCartFromSource();
-  state.authReady = true;
-  renderSharedChrome();
-  initChromeEvents();
-  renderCartSurfaces();
-  renderSearchResults();
-  if (page === 'home') {
-    await wait(850);
-    byId('splashScreen')?.classList.add('is-hidden');
-  }
-  await renderPage();
+
+  let resolveInitialAuth;
+  const initialAuthReady = new Promise((resolve) => {
+    resolveInitialAuth = resolve;
+  });
 
   onAuthChange(async (user) => {
-    if (state.authReady && sameUser(state.user, user)) return;
-    state.user = user;
+    const firstAuthEvent = !state.authReady;
+    const changedUser = !sameUser(state.user, user);
+    if (changedUser) state.user = user;
     state.authReady = true;
-    await syncCartFromSource();
-    await renderPage();
+    if (firstAuthEvent) resolveInitialAuth();
+    if (!state.appReady || (!firstAuthEvent && !changedUser)) return;
+    try {
+      await syncCartFromSource();
+      await renderPage();
+    } catch (error) {
+      console.error('Failed to refresh the page after the auth state changed.', error);
+    }
   });
+
+  try {
+    await Promise.all([loadCatalogData(), initialAuthReady]);
+    await syncCartFromSource();
+    state.appReady = true;
+    if (page === 'home') {
+      await wait(850);
+      byId('splashScreen')?.classList.add('is-hidden');
+    }
+    await renderPage();
+  } catch (error) {
+    console.error('Failed to initialize WISHTICO.', error);
+    renderSharedChrome();
+    initChromeEvents();
+    renderCartSurfaces();
+    showToast('The page could not finish loading. Please refresh and try again.');
+  }
 });
