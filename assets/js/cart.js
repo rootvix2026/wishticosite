@@ -2,7 +2,7 @@
   const STORAGE_KEY = 'wishtico-cart';
   const COUPON_KEY = 'wishtico-coupon';
   const currency = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
-  const readCart = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; } };
+  const readCart = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch (error) { console.warn('Failed to parse cart data:', error); return []; } };
   const writeCart = (items) => { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); document.dispatchEvent(new CustomEvent('cart:updated', { detail: items })); };
   const readCoupon = () => localStorage.getItem(COUPON_KEY) || '';
   const updateBadge = (items) => { const count = items.reduce((sum, item) => sum + item.quantity, 0); document.querySelectorAll('[data-cart-count]').forEach((badge) => { badge.textContent = String(count); }); };
