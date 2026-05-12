@@ -49,10 +49,22 @@ export const db = isDemoMode ? null : getFirestore(app);
 export const auth = isDemoMode ? null : getAuth(app);
 export const storage = isDemoMode ? null : getStorage(app);
 
-const generateId = (prefix = 'item') => `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
+const generateId = (prefix = 'item') => {
+  if (globalThis.crypto?.randomUUID) return `${prefix}-${globalThis.crypto.randomUUID()}`;
+  if (globalThis.crypto?.getRandomValues) {
+    const bytes = new Uint32Array(2);
+    globalThis.crypto.getRandomValues(bytes);
+    return `${prefix}-${Array.from(bytes, (value) => value.toString(36)).join('')}`;
+  }
+  return `${prefix}-${Date.now().toString(36)}`;
+};
 const slugify = (value = '') => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 const clone = (value) => JSON.parse(JSON.stringify(value));
 const nowIso = () => new Date().toISOString();
+
+if (isDemoMode) {
+  console.warn('WISHTICO is running in offline demo mode. Replace the placeholder firebaseConfig values in firebase.js to enable live Firebase data.');
+}
 
 function loadDemoDb() {
   const existing = localStorage.getItem(DEMO_DB_KEY);

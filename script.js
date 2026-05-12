@@ -99,6 +99,19 @@ const getDiscount = (product) => product.offerPercentage || Math.max(0, Math.rou
 const getDeliveryCharge = (subtotal) => (subtotal > 0 && subtotal < 1499 ? 99 : 0);
 const getWishlistKey = () => `${WISHLIST_PREFIX}-${state.user?.uid || 'guest'}`;
 const sameUser = (a, b) => (a?.uid || '') === (b?.uid || '') && (a?.role || '') === (b?.role || '') && (a?.name || '') === (b?.name || '');
+const getSafeRedirect = () => {
+  const candidate = params.get('redirect');
+  if (!candidate) return 'index.html';
+  try {
+    const url = new URL(candidate, window.location.origin);
+    const isSameOrigin = url.origin === window.location.origin;
+    const isSafePath = /^\/?[\w./#?-]+$/.test(candidate) && !candidate.startsWith('//');
+    if (!isSameOrigin || !isSafePath) return 'index.html';
+    return `${url.pathname.replace(/^\//, '')}${url.search}${url.hash}` || 'index.html';
+  } catch {
+    return 'index.html';
+  }
+};
 
 function showToast(message) {
   const stack = byId('toast-stack');
@@ -172,6 +185,7 @@ function renderSharedChrome() {
     headerRoot.innerHTML = `
       <header class="site-header" id="siteHeader">
         <div class="announcement-bar">Welcome to WishTico — Premium Fashion Wear  |  Free Delivery on Prepaid Orders</div>
+        ${isDemoMode ? '<div class="demo-banner">Demo mode active — replace the placeholder Firebase config in <code>firebase.js</code> to enable live data.</div>' : ''}
         <div class="site-header__bar">
           <div class="container site-header__row">
             <a class="brand-lockup" href="index.html" aria-label="WISHTICO home"><img src="assets/images/logo-lockup.svg" alt="WISHTICO" /></a>
@@ -358,17 +372,30 @@ function renderSearchResults() {
   const matches = state.products
     .filter((product) => `${product.name} ${product.category}`.toLowerCase().includes(term))
     .slice(0, 6);
-  root.innerHTML = matches.length
-    ? matches
-        .map(
-          (product) => `
-          <a class="search-item" href="product.html?id=${product.id}">
-            <img src="${product.image}" alt="${product.name}" />
-            <div><strong>${product.name}</strong><span>${product.category} · ${formatPrice(product.price)}</span></div>
-          </a>`
-        )
-        .join('')
-    : `<p class="empty-copy">No products matched “${input.value.trim()}”.</p>`;
+  root.replaceChildren();
+  if (!matches.length) {
+    const empty = document.createElement('p');
+    empty.className = 'empty-copy';
+    empty.textContent = `No products matched “${input.value.trim()}”.`;
+    root.appendChild(empty);
+    return;
+  }
+  matches.forEach((product) => {
+    const link = document.createElement('a');
+    link.className = 'search-item';
+    link.href = `product.html?id=${encodeURIComponent(product.id)}`;
+    const image = document.createElement('img');
+    image.src = product.image;
+    image.alt = product.name;
+    const content = document.createElement('div');
+    const title = document.createElement('strong');
+    title.textContent = product.name;
+    const meta = document.createElement('span');
+    meta.textContent = `${product.category} · ${formatPrice(product.price)}`;
+    content.append(title, meta);
+    link.append(image, content);
+    root.appendChild(link);
+  });
 }
 
 async function loadCatalogData() {
@@ -830,7 +857,7 @@ function passwordToggleSetup() {
 }
 
 function redirectAfterAuth() {
-  return params.get('redirect') || 'index.html';
+  return getSafeRedirect();
 }
 
 function renderAuthNote() {

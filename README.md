@@ -20,7 +20,7 @@ Add homepage, collections, product, checkout, reviews, and admin screenshots her
 
 1. Create a Firebase project.
 2. Enable **Firestore Database**, **Authentication** (Email/Password + Google), and **Storage**.
-3. Open `/home/runner/work/wishticosite/wishticosite/firebase.js`.
+3. Open `firebase.js`.
 4. Replace the placeholder `firebaseConfig` object values with your own Firebase web app config.
 5. Optional: use **Admin → Settings → Seed Demo Data** to populate sample products, categories, and reviews if your database is empty.
 6. Make your user an admin by setting `users/{yourUid}.role = "admin"` in Firestore.
