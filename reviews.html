@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WISHTICO Reviews</title>
+    <meta name="description" content="Read customer reviews for WISHTICO premium fashion and submit your own product feedback." />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="reviews">
+    <div data-site-header></div>
+    <div data-search-overlay></div>
+    <main>
+      <section class="page-hero page-hero--compact">
+        <div class="container reveal">
+          <div class="breadcrumb">Home / Reviews</div>
+          <h1>Customer Reviews</h1>
+          <p>Real voices from the WISHTICO community.</p>
+        </div>
+      </section>
+      <section class="section section--compact">
+        <div class="container review-layout">
+          <div>
+            <div class="review-grid" id="all-reviews-grid"></div>
+          </div>
+          <aside class="review-form-card reveal">
+            <span class="eyebrow">Write a review</span>
+            <h2>Share your style experience</h2>
+            <form id="review-form" class="form-grid">
+              <label class="field"><span>Product</span><select id="review-product" required></select></label>
+              <label class="field"><span>Rating</span><select id="review-rating" required><option value="">Select rating</option><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></label>
+              <label class="field"><span>Title</span><input id="review-title" type="text" required /></label>
+              <label class="field"><span>Message</span><textarea id="review-message" required></textarea></label>
+              <button class="button button-primary button-block" type="submit">Submit Review</button>
+            </form>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <div data-cart-drawer></div>
+    <div data-site-footer></div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

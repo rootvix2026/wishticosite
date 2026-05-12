@@ -1,46 +1,65 @@
-# WishTico
+# WISHTICO
 
-WishTico is a premium static e-commerce website for a fashion wear brand, built with HTML, CSS, and vanilla JavaScript for direct GitHub Pages hosting.
+WISHTICO is a premium fashion clothing e-commerce website built with **HTML5**, **CSS3**, **vanilla JavaScript ES modules**, and **Firebase** (Firestore + Authentication + Storage). It is designed to feel like a luxury modern fashion brand while still running as a static site on GitHub Pages.
 
-## Highlights
+## Features
 
-- Premium homepage with splash screen, hero, category cards, trust strip, best sellers, newsletter, and testimonials
-- Collections page with dynamic filters, sorting, pagination, image hover swaps, and add-to-cart actions
-- Product detail page with gallery, color and size selectors, quantity stepper, trust badges, and related products
-- Slide-out cart drawer plus dedicated cart page with coupon support and local cart persistence
-- About Us and Contact pages with premium styling and responsive layouts
-- WishTico inline SVG logo assets and sample product JSON data
+- Premium glassmorphism navbar, hero splash screen, floating visuals, and modern luxury layout
+- Responsive storefront pages: `index.html`, `collections.html`, `product.html`, `cart.html`, `checkout.html`, `login.html`, `signup.html`, `reviews.html`, `admin.html`
+- Shared `style.css`, `script.js`, `firebase.js`, and `seed.js` flat root layout
+- Firebase modular SDK integration with Firestore, Authentication, and Storage helpers
+- Offline demo fallback when `firebase.js` still uses the placeholder config
+- Dynamic product loading, cart persistence, wishlist, search overlay, protected checkout, and admin CRUD flows
+- Razorpay checkout placeholder with dummy keys for front-end preview only
 
 ## Screenshots
 
-Add screenshots of the homepage, collections page, product page, and cart experience here after deployment.
+Add homepage, collections, product, checkout, reviews, and admin screenshots here after deployment.
 
-## Run locally
+## Firebase Setup
 
-Open `index.html` directly in a browser, or serve the project locally for the best experience:
+1. Create a Firebase project.
+2. Enable **Firestore Database**, **Authentication** (Email/Password + Google), and **Storage**.
+3. Open `firebase.js`.
+4. Replace the placeholder `firebaseConfig` object values with your own Firebase web app config.
+5. Optional: use **Admin → Settings → Seed Demo Data** to populate sample products, categories, and reviews if your database is empty.
+6. Make your user an admin by setting `users/{yourUid}.role = "admin"` in Firestore.
+
+## Local Run
+
+You can open `index.html` directly, but serving the site locally is recommended:
 
 ```bash
-python -m http.server
+python -m http.server 8000
 ```
 
 Then visit `http://localhost:8000`.
 
-## Deploy to GitHub Pages
+## GitHub Pages Deployment
 
-1. Push the repository to GitHub.
-2. In repository settings, open **Pages**.
-3. Set the source to your main branch (or the relevant branch) and root directory.
-4. Save the settings and wait for GitHub Pages to publish the site.
+1. Push the site to the repository.
+2. Open **Settings → Pages**.
+3. Select the **main** branch and the **root** folder.
+4. Save and wait for GitHub Pages to publish the site.
 
-## Tech used
+## Razorpay Note
+
+`checkout.html` includes a placeholder Razorpay integration for UI/demo purposes only.
+
+- It uses a dummy key ID.
+- It does **not** create real orders.
+- Replace it with a real backend-generated order flow before production payments.
+
+## Tech Stack
 
 - HTML5
-- CSS3 (custom properties, grid, flexbox, animations)
-- Vanilla JavaScript
-- Google Fonts: Playfair Display and Inter
-- Unsplash placeholder photography
+- CSS3
+- Vanilla JavaScript (ES modules)
+- Firebase App / Firestore / Authentication / Storage (CDN modular SDK)
+- Razorpay Checkout placeholder
+- Unsplash placeholder imagery
 
 ## Credits
 
-- Product and lifestyle imagery from [Unsplash](https://unsplash.com/)
-- Typography from [Google Fonts](https://fonts.google.com/)
+- Fashion and lifestyle placeholders from [Unsplash](https://unsplash.com/)
+- Fonts from [Google Fonts](https://fonts.google.com/)

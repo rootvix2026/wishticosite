@@ -3,29 +3,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WishTico Product Detail</title>
-    <meta name="description" content="View premium WishTico product details, gallery, sizing, trust badges, and quick purchase actions." />
+    <title>WISHTICO Product</title>
+    <meta name="description" content="Shop premium WISHTICO product details, reviews, related styles, and luxury checkout actions." />
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <link rel="stylesheet" href="assets/css/animations.css" />
-    <link rel="stylesheet" href="assets/css/splash.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body data-page="product">
-    <div class="splash-screen" id="splashScreen" aria-hidden="true"><div class="splash-screen__inner"><div class="splash-screen__logo" aria-label="WishTico logo"><svg viewBox="0 0 220 180" role="img" aria-hidden="true"><g class="splash-fill"><path d="M14 30H40L57 121L81 30H104L128 121L145 30H171L144 150H116L92 70L68 150H40L14 30Z" /><path d="M118 30H210V54H177V150H151V54H118V30Z" /></g><g class="splash-outline"><path d="M14 30H40L57 121L81 30H104L128 121L145 30H171L144 150H116L92 70L68 150H40L14 30Z" /><path d="M118 30H210V54H177V150H151V54H118V30Z" /></g></svg></div><p class="splash-screen__brand">WishTico</p><p class="splash-screen__tagline">Style That Defines You</p><div class="splash-screen__loader"><span></span></div></div></div>
     <div data-site-header></div>
+    <div data-search-overlay></div>
     <main>
-      <section class="section-shell section-shell--muted"><div class="container breadcrumb reveal" id="product-breadcrumb">Home / Collections / Product</div></section>
-      <section class="section-shell"><div class="container" id="product-detail-root"></div></section>
-      <section class="section-shell section-shell--muted"><div class="container"><div class="section-heading reveal"><span class="eyebrow">Related Picks</span><h2>Pair it with these refined essentials</h2></div><div class="product-grid" id="related-product-grid"></div></div></section>
+      <section class="page-hero page-hero--compact">
+        <div class="container reveal">
+          <div class="breadcrumb" id="product-breadcrumb">Home / Product</div>
+        </div>
+      </section>
+      <section class="section section--compact">
+        <div class="container" id="product-detail-root"></div>
+      </section>
+      <section class="section section--muted">
+        <div class="container">
+          <div class="product-tabs reveal">
+            <button class="tab-button is-active" type="button" data-tab-target="description">Description</button>
+            <button class="tab-button" type="button" data-tab-target="reviews">Reviews</button>
+          </div>
+          <div class="tab-panel is-active reveal" id="tab-description"></div>
+          <div class="tab-panel reveal" id="tab-reviews">
+            <div class="review-grid" id="product-review-grid"></div>
+          </div>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container">
+          <div class="section-head reveal">
+            <span class="eyebrow">Related products</span>
+            <h2>You may also like</h2>
+          </div>
+          <div class="product-grid" id="related-products"></div>
+        </div>
+      </section>
     </main>
     <div data-cart-drawer></div>
     <div data-site-footer></div>
-    <script src="assets/js/main.js" defer></script>
-    <script src="assets/js/splash.js" defer></script>
-    <script src="assets/js/cart.js" defer></script>
-    <script src="assets/js/products.js" defer></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>

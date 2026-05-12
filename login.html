@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WISHTICO Login</title>
+    <meta name="description" content="Login to your WISHTICO account to track orders, save wishlist items, and checkout faster." />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="login" class="auth-page">
+    <div data-site-header></div>
+    <div data-search-overlay></div>
+    <main class="auth-shell">
+      <section class="auth-card reveal">
+        <span class="eyebrow">Welcome back</span>
+        <h1>Login to WISHTICO</h1>
+        <p class="auth-note" id="auth-demo-note"></p>
+        <form id="login-form" class="form-grid">
+          <label class="field"><span>Email</span><input name="email" type="email" required /></label>
+          <label class="field password-field"><span>Password</span><input name="password" type="password" required /><button class="password-toggle" type="button" data-password-toggle>Show</button></label>
+          <button class="button button-primary button-block" type="submit">Login</button>
+        </form>
+        <button class="button button-secondary button-block" id="google-login" type="button">Continue with Google</button>
+        <p class="auth-switch">New here? <a href="signup.html">Create account</a></p>
+      </section>
+    </main>
+    <div data-cart-drawer></div>
+    <div data-site-footer></div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
