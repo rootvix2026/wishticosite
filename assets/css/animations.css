@@ -1,0 +1,8 @@
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+.nav-link::after, .footer-column a::after, .social-links a::after { content: ''; position: absolute; left: 0; bottom: -.1rem; width: 100%; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .25s ease; }
+.nav-link:hover::after, .nav-link:focus-visible::after, .footer-column a:hover::after, .social-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+.footer-column a, .social-links a { position: relative; width: fit-content; }
+.magnetic { will-change: transform; }
+.category-card, .product-card, .value-card, .newsletter-band__card, .testimonial-card, .trust-item { transition: transform .25s ease, box-shadow .25s ease; }
+.category-card:hover, .product-card:hover, .value-card:hover, .newsletter-band__card:hover, .testimonial-card:hover, .trust-item:hover { transform: translateY(-6px); box-shadow: 0 24px 40px rgba(17,17,17,.1); }

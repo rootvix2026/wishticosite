@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">WishTico premium image placeholder</title>
+  <desc id="desc">A premium WishTico branded gradient placeholder used when a remote fashion image cannot be loaded.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7f1e8" />
+      <stop offset="55%" stop-color="#efe4d3" />
+      <stop offset="100%" stop-color="#d8c2a0" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#111111" stop-opacity="0.92" />
+      <stop offset="100%" stop-color="#3e3327" stop-opacity="0.88" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)" />
+  <circle cx="1020" cy="170" r="180" fill="#ffffff" opacity="0.35" />
+  <circle cx="180" cy="760" r="220" fill="#ffffff" opacity="0.2" />
+  <rect x="110" y="135" width="980" height="630" rx="48" fill="url(#panel)" opacity="0.94" />
+  <g fill="#f7f1e8">
+    <path d="M315 260h46l33 175 46-175h44l46 175 33-175h46l-53 280h-50l-47-149-47 149h-50l-53-280Z" />
+    <path d="M590 260h190v42h-72v238h-46V302h-72v-42Z" />
+  </g>
+  <text x="600" y="640" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="48" letter-spacing="8" fill="#f7f1e8">WISHTICO PREMIUM EDIT</text>
+</svg>
