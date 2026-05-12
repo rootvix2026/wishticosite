@@ -1053,13 +1053,12 @@ async function ensureAdmin() {
   }
   const resolvedUser = { ...state.user, ...(profile || {}) };
   state.user = resolvedUser;
-  const hasAdminAccess = isAdminUser(resolvedUser);
   if (profileFetchFailed) {
-    if (!hasAdminAccess) {
-      showToast('We could not verify admin access right now. Please refresh and try again.');
-      return false;
-    }
-  } else if (!hasAdminAccess) {
+    showToast('We could not verify admin access right now. Please refresh and try again.');
+    window.location.href = 'index.html';
+    return false;
+  }
+  if (!isAdminUser(resolvedUser)) {
     showToast('Admin access only.');
     window.location.href = 'index.html';
     return false;
@@ -1392,9 +1391,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   saveCouponCode(getCouponCode());
   bindGlobalActions();
 
-  let resolveInitialAuth;
+  let resolveAuthReady;
   const initialAuthReady = new Promise((resolve) => {
-    resolveInitialAuth = resolve;
+    resolveAuthReady = resolve;
   });
 
   onAuthChange(async (user) => {
@@ -1402,7 +1401,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const changedUser = !sameUser(state.user, user);
     if (changedUser) state.user = user;
     state.authReady = true;
-    if (firstAuthEvent) resolveInitialAuth();
+    if (firstAuthEvent) resolveAuthReady();
     if (!state.appReady || (!firstAuthEvent && !changedUser)) return;
     try {
       await syncCartFromSource();
