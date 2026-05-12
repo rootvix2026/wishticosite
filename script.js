@@ -92,7 +92,7 @@ const byId = (id) => document.getElementById(id);
 const formatPrice = (value) => currency.format(Number(value || 0));
 const toSlug = (value = '') => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const normalizeRole = (value = '') => String(value).trim().toLowerCase();
+const normalizeRoleForComparison = (value = '') => String(value).trim().toLowerCase();
 const averageRating = (productId) => {
   const productReviews = state.reviews.filter((review) => review.productId === productId && review.approved !== false);
   if (!productReviews.length) return 4.8;
@@ -103,7 +103,7 @@ const getDiscount = (product) => product.offerPercentage || Math.max(0, Math.rou
 const getDeliveryCharge = (subtotal) => (subtotal > 0 && subtotal < 1499 ? 99 : 0);
 const getWishlistKey = () => `${WISHLIST_PREFIX}-${state.user?.uid || 'guest'}`;
 const sameUser = (a, b) => (a?.uid || '') === (b?.uid || '') && (a?.role || '') === (b?.role || '') && (a?.name || '') === (b?.name || '');
-const isAdminUser = (profile = state.user) => normalizeRole(profile?.role) === 'admin';
+const isAdminUser = (profile = state.user) => normalizeRoleForComparison(profile?.role) === 'admin';
 const getSafeRedirect = () => {
   const candidate = params.get('redirect');
   if (!candidate) return 'index.html';
@@ -898,7 +898,7 @@ function showOrderSuccess() {
 
 function passwordToggleSetup() {
   document.querySelectorAll('[data-password-toggle]').forEach((button) => button.addEventListener('click', () => {
-    const input = button.parentElement?.querySelector('input');
+    const input = button.parentElement?.querySelector('input[type="password"], input[type="text"]');
     if (!input) return;
     const reveal = input.type === 'password';
     input.type = reveal ? 'text' : 'password';
@@ -1053,11 +1053,13 @@ async function ensureAdmin() {
   }
   const resolvedUser = { ...state.user, ...(profile || {}) };
   state.user = resolvedUser;
-  if (profileLoadFailed && !isAdminUser(resolvedUser)) {
-    showToast('We could not verify admin access right now. Please refresh and try again.');
-    return false;
-  }
-  if (!isAdminUser(resolvedUser)) {
+  const hasAdminAccess = isAdminUser(resolvedUser);
+  if (profileLoadFailed) {
+    if (!hasAdminAccess) {
+      showToast('We could not verify admin access right now. Please refresh and try again.');
+      return false;
+    }
+  } else if (!hasAdminAccess) {
     showToast('Admin access only.');
     window.location.href = 'index.html';
     return false;
