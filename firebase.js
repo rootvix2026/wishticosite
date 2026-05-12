@@ -52,6 +52,7 @@ export const db = isDemoMode ? null : getFirestore(app);
 export const auth = isDemoMode ? null : getAuth(app);
 export const storage = isDemoMode ? null : getStorage(app);
 let persistencePromise = null;
+let persistenceUnavailable = false;
 
 const generateId = (prefix = 'item') => {
   if (globalThis.crypto?.randomUUID) return `${prefix}-${globalThis.crypto.randomUUID()}`;
@@ -72,11 +73,13 @@ if (isDemoMode) {
 
 async function ensureAuthPersistence() {
   if (isDemoMode || !auth) return true;
+  if (persistenceUnavailable) return false;
   if (!persistencePromise) {
     persistencePromise = setPersistence(auth, browserLocalPersistence).catch((error) => {
       console.error('Failed to enable Firebase auth persistence.', error);
+      persistenceUnavailable = true;
       persistencePromise = null;
-      throw error;
+      return false;
     });
   }
   return persistencePromise;

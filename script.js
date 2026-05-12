@@ -38,7 +38,8 @@ const params = new URLSearchParams(window.location.search);
 const GUEST_CART_KEY = 'wishtico-guest-cart';
 const COUPON_KEY = 'wishtico-coupon';
 const WISHLIST_PREFIX = 'wishtico-wishlist';
-const ADMIN_EMAILS = ['admin@wishtico.demo'];
+const DEFAULT_PRODUCT_SIZE = 'M';
+const DEFAULT_PRODUCT_COLOR = { name: 'Default', hex: '#0E0E0E' };
 
 const state = {
   user: null,
@@ -91,9 +92,7 @@ const byId = (id) => document.getElementById(id);
 const formatPrice = (value) => currency.format(Number(value || 0));
 const toSlug = (value = '') => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const normalizeEmail = (value = '') => String(value).trim().toLowerCase();
 const normalizeRole = (value = '') => String(value).trim().toLowerCase();
-const adminEmails = new Set(ADMIN_EMAILS.map(normalizeEmail));
 const averageRating = (productId) => {
   const productReviews = state.reviews.filter((review) => review.productId === productId && review.approved !== false);
   if (!productReviews.length) return 4.8;
@@ -104,7 +103,7 @@ const getDiscount = (product) => product.offerPercentage || Math.max(0, Math.rou
 const getDeliveryCharge = (subtotal) => (subtotal > 0 && subtotal < 1499 ? 99 : 0);
 const getWishlistKey = () => `${WISHLIST_PREFIX}-${state.user?.uid || 'guest'}`;
 const sameUser = (a, b) => (a?.uid || '') === (b?.uid || '') && (a?.role || '') === (b?.role || '') && (a?.name || '') === (b?.name || '');
-const isAdminUser = (profile = state.user) => normalizeRole(profile?.role) === 'admin' || adminEmails.has(normalizeEmail(profile?.email));
+const isAdminUser = (profile = state.user) => normalizeRole(profile?.role) === 'admin';
 const getSafeRedirect = () => {
   const candidate = params.get('redirect');
   if (!candidate) return 'index.html';
@@ -482,9 +481,9 @@ function addToCart(product, overrides = {}) {
     name: product.name,
     price: Number(product.price),
     image: product.image,
-    size: overrides.size || product.sizes?.[0] || 'M',
-    color: overrides.color || product.colors?.[0]?.hex || '#0E0E0E',
-    colorName: overrides.colorName || product.colors?.[0]?.name || 'Default',
+    size: overrides.size || product.sizes?.[0] || DEFAULT_PRODUCT_SIZE,
+    color: overrides.color || product.colors?.[0]?.hex || DEFAULT_PRODUCT_COLOR.hex,
+    colorName: overrides.colorName || product.colors?.[0]?.name || DEFAULT_PRODUCT_COLOR.name,
     quantity: Number(overrides.quantity || 1)
   };
   const existing = state.cart.find((entry) => entry.id === item.id && entry.size === item.size && entry.color === item.color);
@@ -681,8 +680,8 @@ function renderProductPage() {
   const product = state.products.find((item) => item.id === params.get('id')) || state.products[0];
   if (!product) return;
   const images = product.images?.length ? product.images : [product.image].filter(Boolean);
-  const sizes = product.sizes?.length ? product.sizes : ['M'];
-  const colors = product.colors?.length ? product.colors : [{ name: 'Default', hex: '#0E0E0E' }];
+  const sizes = product.sizes?.length ? product.sizes : [DEFAULT_PRODUCT_SIZE];
+  const colors = product.colors?.length ? product.colors : [DEFAULT_PRODUCT_COLOR];
   const reviews = state.reviews.filter((review) => review.productId === product.id && review.approved !== false);
   byId('product-breadcrumb') && (byId('product-breadcrumb').textContent = `Home / Collections / ${product.category} / ${product.name}`);
   byId('tab-description') && (byId('tab-description').innerHTML = `<div class="content-card"><p>${product.description}</p></div>`);
@@ -1045,13 +1044,19 @@ async function ensureAdmin() {
     return false;
   }
   let profile = null;
+  let profileLoadFailed = false;
   try {
     profile = await getUserProfile(state.user.uid);
   } catch (error) {
+    profileLoadFailed = true;
     console.error('Failed to load admin profile.', error);
   }
   const resolvedUser = { ...state.user, ...(profile || {}) };
   state.user = resolvedUser;
+  if (profileLoadFailed && !isAdminUser(resolvedUser)) {
+    showToast('We could not verify admin access right now. Please refresh and try again.');
+    return false;
+  }
   if (!isAdminUser(resolvedUser)) {
     showToast('Admin access only.');
     window.location.href = 'index.html';
