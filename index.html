@@ -3,132 +3,158 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WishTico | Premium Fashion Wear</title>
-    <meta name="description" content="WishTico is a premium fashion wear destination with polished collections, exclusive offers, and refined essentials." />
+    <title>WISHTICO | Premium Fashion Wear</title>
+    <meta
+      name="description"
+      content="WISHTICO is a premium fashion clothing store with luxury modern styling, elevated essentials, and a refined shopping experience."
+    />
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <link rel="stylesheet" href="assets/css/animations.css" />
-    <link rel="stylesheet" href="assets/css/splash.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body data-page="home">
     <div class="splash-screen" id="splashScreen" aria-hidden="true">
-      <div class="splash-screen__inner">
-        <div class="splash-screen__logo" aria-label="WishTico logo">
-          <svg viewBox="0 0 220 180" role="img" aria-hidden="true">
-            <g class="splash-fill">
-              <path d="M14 30H40L57 121L81 30H104L128 121L145 30H171L144 150H116L92 70L68 150H40L14 30Z" />
-              <path d="M118 30H210V54H177V150H151V54H118V30Z" />
-            </g>
-            <g class="splash-outline">
-              <path d="M14 30H40L57 121L81 30H104L128 121L145 30H171L144 150H116L92 70L68 150H40L14 30Z" />
-              <path d="M118 30H210V54H177V150H151V54H118V30Z" />
-            </g>
-          </svg>
-        </div>
-        <p class="splash-screen__brand">WishTico</p>
-        <p class="splash-screen__tagline">Style That Defines You</p>
-        <div class="splash-screen__loader"><span></span></div>
+      <div class="splash-screen__brandmark">
+        <img src="assets/images/logo.svg" alt="WISHTICO WT monogram" />
+        <span>WISHTICO</span>
       </div>
     </div>
     <div data-site-header></div>
+    <div data-search-overlay></div>
     <main>
-      <section class="hero section-shell">
+      <section class="hero hero--home">
         <div class="container hero__grid">
           <div class="hero__content reveal">
-            <span class="eyebrow">Premium Fashion Wear</span>
+            <span class="eyebrow">Luxury modern fashion</span>
             <h1>Style That Defines You</h1>
-            <p>Discover elevated tailoring, luxe essentials, and statement layers curated for modern wardrobes that move with confidence.</p>
+            <p>
+              Discover premium everyday layers, statement silhouettes, and refined edits designed for confident wardrobes.
+            </p>
             <div class="hero__actions">
-              <a class="button button-primary magnetic" href="collections.html">Shop Now</a>
-              <a class="button button-secondary magnetic" href="#shop-by-category">Explore Collection</a>
+              <a class="button button-primary" href="collections.html">Shop Now</a>
+              <a class="button button-secondary" href="collections.html">Explore Collection</a>
             </div>
-            <div class="hero__highlights">
-              <div><strong data-counter="1200">0</strong><span>Luxury edits sold</span></div>
-              <div><strong data-counter="48">0</strong><span>Curated weekly drops</span></div>
+            <div class="hero__metrics glass-card">
+              <div><strong>12K+</strong><span>premium customers</span></div>
+              <div><strong>48 hrs</strong><span>dispatch on prepaid</span></div>
+              <div><strong>4.9★</strong><span>style reviews</span></div>
             </div>
           </div>
-          <div class="hero__media reveal" data-parallax>
-            <figure class="hero-card hero-card--primary">
-              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80" alt="Model wearing premium WishTico fashion" />
+          <div class="hero__visual reveal">
+            <div class="hero__blob hero__blob--gold"></div>
+            <div class="hero__blob hero__blob--beige"></div>
+            <figure class="hero__image hero__image--main floating-card">
+              <img
+                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80"
+                alt="Premium model wearing WISHTICO clothing"
+              />
             </figure>
-            <figure class="hero-card hero-card--accent">
-              <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=700&q=80" alt="WishTico premium seasonal edit" />
+            <figure class="hero__image hero__image--accent floating-card floating-card--delay">
+              <img
+                src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=80"
+                alt="WISHTICO premium seasonal edit"
+              />
             </figure>
-            <div class="floating-note glass-panel"><span>New Drop</span><strong>Monochrome Luxe</strong></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="category-rail section-shell">
-        <div class="container">
-          <div class="section-heading reveal">
-            <span class="eyebrow">Featured Categories</span>
-            <h2>Built for every premium look</h2>
-          </div>
-          <div class="category-grid">
-            <article class="category-card reveal"><img src="https://images.unsplash.com/photo-1602810316498-ab67cf68c8e1?auto=format&fit=crop&w=800&q=80" alt="Premium shirts" /><div class="category-card__content"><h3>Shirts</h3><a href="collections.html?category=Shirts">View All</a></div></article>
-            <article class="category-card reveal"><img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80" alt="Premium t-shirts" /><div class="category-card__content"><h3>T-Shirts</h3><a href="collections.html?category=T-Shirts">View All</a></div></article>
-            <article class="category-card reveal"><img src="https://images.unsplash.com/photo-1506629905607-24339d0bb38b?auto=format&fit=crop&w=800&q=80" alt="Premium pants" /><div class="category-card__content"><h3>Pants</h3><a href="collections.html?category=Pants">View All</a></div></article>
-            <article class="category-card reveal"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80" alt="Combo offers" /><div class="category-card__content"><h3>Combo Offers</h3><a href="collections.html?category=Combo%20Offers">View All</a></div></article>
-            <article class="category-card reveal"><img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=800&q=80" alt="Premium jackets" /><div class="category-card__content"><h3>Jackets</h3><a href="collections.html?category=Jackets">View All</a></div></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="trust-strip section-shell">
-        <div class="container trust-strip__grid reveal">
-          <div class="trust-item"><span aria-hidden="true">✦</span><strong>Free Shipping</strong><small>On all prepaid orders</small></div>
-          <div class="trust-item"><span aria-hidden="true">↺</span><strong>Easy Returns</strong><small>Hassle-free exchanges</small></div>
-          <div class="trust-item"><span aria-hidden="true">&#128274;</span><strong>Secure Payment</strong><small>Trusted checkout flow</small></div>
-          <div class="trust-item"><span aria-hidden="true">✔</span><strong>Best Quality</strong><small>Curated premium fabrics</small></div>
-        </div>
-      </section>
-
-      <section class="products-showcase section-shell" id="shop-by-category">
-        <div class="container">
-          <div class="section-heading reveal"><span class="eyebrow">Shop By Categories</span><h2>Signature styles for every edit</h2></div>
-          <div class="filter-tabs reveal" id="home-category-tabs"></div>
-          <div class="product-grid" id="home-product-grid"></div>
-        </div>
-      </section>
-
-      <section class="products-showcase section-shell section-shell--muted" id="featured-products">
-        <div class="container">
-          <div class="section-heading reveal"><span class="eyebrow">Best Sellers</span><h2>Icons of the WishTico wardrobe</h2></div>
-          <div class="product-grid" id="featured-product-grid"></div>
-        </div>
-      </section>
-
-      <section class="newsletter-band section-shell">
-        <div class="container newsletter-band__card reveal">
-          <div><span class="eyebrow">Exclusive Access</span><h2>Join the WishTico private list</h2><p>Unlock first access to new drops, exclusive pricing, and personalized premium edits.</p></div>
-          <form class="newsletter-form" id="newsletter-form"><label class="sr-only" for="newsletter-email">Email Address</label><input id="newsletter-email" type="email" placeholder="Enter your email" required /><button class="button button-primary" type="submit">Subscribe</button></form>
-        </div>
-      </section>
-
-      <section class="testimonials section-shell">
-        <div class="container">
-          <div class="section-heading reveal"><span class="eyebrow">Testimonials</span><h2>Loved by style-forward customers</h2></div>
-          <div class="testimonial-slider reveal" data-testimonial-slider>
-            <button class="slider-arrow" type="button" data-slider-prev aria-label="Previous testimonial">←</button>
-            <div class="testimonial-slider__track">
-              <article class="testimonial-card is-active" data-testimonial><p>“WishTico feels like luxury without compromise — the finish, fit, and delivery experience are all exceptional.”</p><strong>Ritika S.</strong><span>Mumbai</span></article>
-              <article class="testimonial-card" data-testimonial><p>“The premium shirts and jackets look tailored straight out of the box. My go-to brand for polished everyday wear.”</p><strong>Arjun P.</strong><span>Bengaluru</span></article>
-              <article class="testimonial-card" data-testimonial><p>“From the packaging to the fabric quality, WishTico delivers a refined experience that genuinely feels elevated.”</p><strong>Neha K.</strong><span>Delhi</span></article>
+            <div class="hero__note glass-card">
+              <span>New drop</span>
+              <strong>Monochrome Luxe 2026</strong>
             </div>
-            <button class="slider-arrow" type="button" data-slider-next aria-label="Next testimonial">→</button>
           </div>
+        </div>
+      </section>
+
+      <section class="section section--muted" id="featured-collections-section">
+        <div class="container">
+          <div class="section-head reveal">
+            <span class="eyebrow">Featured collections</span>
+            <h2>Curated for the premium street wardrobe</h2>
+          </div>
+          <div class="collection-cards" id="featured-collections"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head reveal">
+            <span class="eyebrow">Trending now</span>
+            <h2>Best-selling fashion edits</h2>
+          </div>
+          <div class="product-grid" id="trending-products"></div>
+        </div>
+      </section>
+
+      <section class="section section--muted">
+        <div class="container">
+          <div class="section-head reveal inline-head">
+            <div>
+              <span class="eyebrow">Combo offers</span>
+              <h2>Sharper value, richer styling</h2>
+            </div>
+            <a class="text-link" href="collections.html?category=Combo%20Offers">View all offers</a>
+          </div>
+          <div class="product-grid" id="combo-products"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head reveal inline-head">
+            <div>
+              <span class="eyebrow">Customer reviews</span>
+              <h2>What our community is saying</h2>
+            </div>
+            <a class="text-link" href="reviews.html">Read all reviews</a>
+          </div>
+          <div class="review-grid" id="home-reviews"></div>
+        </div>
+      </section>
+
+      <section class="section section--muted">
+        <div class="container">
+          <div class="section-head reveal">
+            <span class="eyebrow">Instagram gallery</span>
+            <h2>Styled in real life</h2>
+          </div>
+          <div class="instagram-grid">
+            <article class="instagram-card reveal"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80" alt="Fashion gallery 1" /><span>@wishtico</span></article>
+            <article class="instagram-card reveal"><img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80" alt="Fashion gallery 2" /><span>@wishtico</span></article>
+            <article class="instagram-card reveal"><img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80" alt="Fashion gallery 3" /><span>@wishtico</span></article>
+            <article class="instagram-card reveal"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80" alt="Fashion gallery 4" /><span>@wishtico</span></article>
+            <article class="instagram-card reveal"><img src="https://images.unsplash.com/photo-1506629905607-24339d0bb38b?auto=format&fit=crop&w=800&q=80" alt="Fashion gallery 5" /><span>@wishtico</span></article>
+            <article class="instagram-card reveal"><img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=800&q=80" alt="Fashion gallery 6" /><span>@wishtico</span></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container info-grid">
+          <article class="info-card reveal" id="about">
+            <span class="eyebrow">About</span>
+            <h2>Designed for elevated everyday dressing</h2>
+            <p>
+              WISHTICO blends premium tailoring, wearable streetwear confidence, and thoughtful modern essentials for a luxury yet accessible wardrobe.
+            </p>
+          </article>
+          <article class="info-card reveal" id="help">
+            <span class="eyebrow">Help</span>
+            <h2>Need support?</h2>
+            <p>Email care@wishtico.com, use the live cart support links, or review delivery tracking after checkout.</p>
+          </article>
+          <article class="info-card reveal" id="contact">
+            <span class="eyebrow">Contact</span>
+            <h2>Talk to our style team</h2>
+            <p>Call +91 98765 43210 or message us for sizing help, order updates, and premium shopping assistance.</p>
+          </article>
         </div>
       </section>
     </main>
     <div data-cart-drawer></div>
     <div data-site-footer></div>
-    <script src="assets/js/main.js" defer></script>
-    <script src="assets/js/splash.js" defer></script>
-    <script src="assets/js/cart.js" defer></script>
-    <script src="assets/js/products.js" defer></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>

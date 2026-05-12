@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WISHTICO Checkout</title>
+    <meta name="description" content="Complete your WISHTICO checkout with premium delivery details, payment selection, and order review." />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  </head>
+  <body data-page="checkout">
+    <div data-site-header></div>
+    <div data-search-overlay></div>
+    <main>
+      <section class="page-hero page-hero--compact">
+        <div class="container reveal">
+          <div class="breadcrumb">Home / Checkout</div>
+          <h1>Secure Checkout</h1>
+          <p>Three polished steps to complete your WISHTICO order.</p>
+        </div>
+      </section>
+
+      <section class="section section--compact">
+        <div class="container checkout-layout">
+          <div>
+            <div class="stepper reveal">
+              <div class="stepper__item is-active"><span>1</span><strong>Address</strong></div>
+              <div class="stepper__item"><span>2</span><strong>Payment</strong></div>
+              <div class="stepper__item"><span>3</span><strong>Review</strong></div>
+            </div>
+
+            <form class="checkout-card reveal" id="checkout-form">
+              <div class="form-grid form-grid--two">
+                <label class="field"><span>Full name</span><input name="name" type="text" required /></label>
+                <label class="field"><span>Phone</span><input name="phone" type="tel" required /></label>
+                <label class="field"><span>Email</span><input name="email" type="email" required /></label>
+                <label class="field"><span>Country</span><input name="country" type="text" value="India" required /></label>
+                <label class="field field--full"><span>Address line 1</span><input name="line1" type="text" required /></label>
+                <label class="field field--full"><span>Address line 2</span><input name="line2" type="text" /></label>
+                <label class="field"><span>City</span><input name="city" type="text" required /></label>
+                <label class="field"><span>State</span><input name="state" type="text" required /></label>
+                <label class="field"><span>Pincode</span><input name="pincode" type="text" required /></label>
+              </div>
+
+              <div class="checkout-card__section">
+                <h2>Payment</h2>
+                <label class="radio-card"><input type="radio" name="paymentMethod" value="razorpay" checked /> <span>Razorpay (placeholder checkout)</span></label>
+                <label class="radio-card"><input type="radio" name="paymentMethod" value="cod" /> <span>Cash on Delivery</span></label>
+                <div class="button-group">
+                  <button class="button button-secondary" id="pay-razorpay" type="button">Preview Razorpay</button>
+                </div>
+              </div>
+
+              <div class="checkout-card__section">
+                <h2>Review</h2>
+                <div class="cart-list cart-list--compact" id="checkout-items"></div>
+              </div>
+
+              <button class="button button-primary button-block" type="submit">Place Order</button>
+            </form>
+          </div>
+
+          <aside class="summary-card reveal">
+            <h2>Order Summary</h2>
+            <dl class="summary-list">
+              <div><dt>Subtotal</dt><dd id="checkout-subtotal">₹0</dd></div>
+              <div><dt>Delivery</dt><dd id="checkout-delivery">₹0</dd></div>
+              <div><dt>Discount</dt><dd id="checkout-discount">₹0</dd></div>
+              <div class="summary-total"><dt>Total</dt><dd id="checkout-total">₹0</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section--muted" id="my-orders">
+        <div class="container">
+          <div class="section-head reveal">
+            <span class="eyebrow">My orders</span>
+            <h2>Your recent orders</h2>
+          </div>
+          <div class="order-list" id="my-orders-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="order-success" id="order-success" aria-hidden="true">
+      <div class="order-success__card">
+        <div class="success-checkmark">
+          <svg viewBox="0 0 70 70" aria-hidden="true">
+            <circle cx="35" cy="35" r="30"></circle>
+            <path d="M22 36l8 8 18-20"></path>
+          </svg>
+        </div>
+        <h2>Order placed successfully</h2>
+        <p>Your premium WISHTICO order has been confirmed.</p>
+        <button class="button button-primary" id="view-order-button" type="button">View Orders</button>
+      </div>
+      <div class="confetti" id="confetti-root"></div>
+    </div>
+
+    <div data-cart-drawer></div>
+    <div data-site-footer></div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

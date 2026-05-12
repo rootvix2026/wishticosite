@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WISHTICO Admin</title>
+    <meta name="description" content="Manage WISHTICO products, orders, customers, reviews, offers, categories, and settings." />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="admin" class="admin-body">
+    <main class="admin-shell">
+      <aside class="admin-sidebar">
+        <a class="admin-logo" href="index.html"><img src="assets/images/logo-lockup.svg" alt="WISHTICO" /></a>
+        <nav class="admin-nav" id="admin-nav">
+          <button class="is-active" type="button" data-admin-tab="dashboard">Dashboard</button>
+          <button type="button" data-admin-tab="products">Products</button>
+          <button type="button" data-admin-tab="orders">Orders</button>
+          <button type="button" data-admin-tab="customers">Customers</button>
+          <button type="button" data-admin-tab="reviews">Reviews</button>
+          <button type="button" data-admin-tab="offers">Offers/Coupons</button>
+          <button type="button" data-admin-tab="categories">Categories</button>
+          <button type="button" data-admin-tab="settings">Settings</button>
+        </nav>
+      </aside>
+
+      <section class="admin-content">
+        <header class="admin-topbar">
+          <div>
+            <span class="eyebrow">Admin dashboard</span>
+            <h1>Manage WISHTICO</h1>
+          </div>
+          <div class="button-group">
+            <a class="button button-secondary" href="index.html">View Store</a>
+            <button class="button button-primary" id="admin-add-product" type="button">+ Add Product</button>
+          </div>
+        </header>
+
+        <div class="admin-panel is-active" id="admin-panel-dashboard">
+          <div class="stats-grid" id="dashboard-stats"></div>
+          <div class="admin-grid admin-grid--two">
+            <section class="admin-card">
+              <div class="admin-card__head"><h2>Recent Orders</h2></div>
+              <div class="table-wrap"><table class="admin-table"><thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead><tbody id="recent-orders-body"></tbody></table></div>
+            </section>
+            <section class="admin-card">
+              <div class="admin-card__head"><h2>Revenue - Last 7 Days</h2></div>
+              <div class="chart-bars" id="revenue-chart"></div>
+            </section>
+          </div>
+        </div>
+
+        <div class="admin-panel" id="admin-panel-products">
+          <section class="admin-card">
+            <div class="admin-card__head"><h2>Products</h2></div>
+            <div class="table-wrap"><table class="admin-table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody id="admin-products-body"></tbody></table></div>
+          </section>
+        </div>
+
+        <div class="admin-panel" id="admin-panel-orders">
+          <section class="admin-card">
+            <div class="admin-card__head"><h2>Orders</h2></div>
+            <div class="table-wrap"><table class="admin-table"><thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead><tbody id="admin-orders-body"></tbody></table></div>
+          </section>
+        </div>
+
+        <div class="admin-panel" id="admin-panel-customers">
+          <section class="admin-card">
+            <div class="admin-card__head"><h2>Customers</h2></div>
+            <div class="table-wrap"><table class="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Orders</th></tr></thead><tbody id="admin-customers-body"></tbody></table></div>
+          </section>
+        </div>
+
+        <div class="admin-panel" id="admin-panel-reviews">
+          <section class="admin-card">
+            <div class="admin-card__head"><h2>Reviews</h2></div>
+            <div class="table-wrap"><table class="admin-table"><thead><tr><th>Customer</th><th>Product</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead><tbody id="admin-reviews-body"></tbody></table></div>
+          </section>
+        </div>
+
+        <div class="admin-panel" id="admin-panel-offers">
+          <section class="admin-card">
+            <div class="admin-card__head"><h2>Offers/Coupons</h2></div>
+            <form class="form-grid form-grid--two admin-inline-form" id="offer-form">
+              <label class="field"><span>Code</span><input name="code" type="text" required /></label>
+              <label class="field"><span>% Off</span><input name="percentage" type="number" min="1" max="90" required /></label>
+              <label class="field"><span>Minimum order</span><input name="minOrder" type="number" min="0" required /></label>
+              <label class="field"><span>Expiry</span><input name="expiry" type="date" required /></label>
+              <button class="button button-primary" type="submit">Save Coupon</button>
+            </form>
+            <div class="table-wrap"><table class="admin-table"><thead><tr><th>Code</th><th>Discount</th><th>Min Order</th><th>Expiry</th><th>Actions</th></tr></thead><tbody id="admin-offers-body"></tbody></table></div>
+          </section>
+        </div>
+
+        <div class="admin-panel" id="admin-panel-categories">
+          <section class="admin-card">
+            <div class="admin-card__head"><h2>Categories</h2></div>
+            <form class="form-grid form-grid--two admin-inline-form" id="category-form">
+              <label class="field"><span>Name</span><input name="name" type="text" required /></label>
+              <label class="field"><span>Image URL</span><input name="image" type="url" required /></label>
+              <button class="button button-primary" type="submit">Save Category</button>
+            </form>
+            <div class="table-wrap"><table class="admin-table"><thead><tr><th>Name</th><th>Slug</th><th>Actions</th></tr></thead><tbody id="admin-categories-body"></tbody></table></div>
+          </section>
+        </div>
+
+        <div class="admin-panel" id="admin-panel-settings">
+          <section class="admin-card">
+            <div class="admin-card__head"><h2>Settings</h2></div>
+            <div class="settings-grid">
+              <article class="mini-card"><h3>Seed Demo Data</h3><p>Populate products, categories, and reviews if the collections are empty.</p><button class="button button-primary" id="seed-data-button" type="button">Seed Demo Data</button></article>
+              <article class="mini-card"><h3>Firebase Mode</h3><p id="firebase-mode-copy">Loading current mode...</p></article>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="admin-modal" id="product-modal">
+      <form class="admin-modal__card" id="product-form" method="dialog">
+        <div class="admin-modal__head">
+          <h2 id="product-modal-title">Add Product</h2>
+          <button class="close-button" id="close-product-modal" type="button">×</button>
+        </div>
+        <input id="product-id" type="hidden" />
+        <div class="form-grid form-grid--two">
+          <label class="field field--full"><span>Name</span><input id="product-name" type="text" required /></label>
+          <label class="field field--full"><span>Description</span><textarea id="product-description" required></textarea></label>
+          <label class="field"><span>Category</span><select id="product-category"></select></label>
+          <label class="field"><span>Price</span><input id="product-price" type="number" min="0" required /></label>
+          <label class="field"><span>Original Price</span><input id="product-original-price" type="number" min="0" required /></label>
+          <label class="field"><span>Offer %</span><input id="product-offer" type="number" min="0" max="90" required /></label>
+          <label class="field"><span>Stock</span><input id="product-stock" type="number" min="0" required /></label>
+          <label class="field"><span>Sizes (comma separated)</span><input id="product-sizes" type="text" placeholder="S, M, L, XL" required /></label>
+          <label class="field"><span>Colors (name:#hex, comma separated)</span><input id="product-colors" type="text" placeholder="Black:#0E0E0E, Beige:#E8DDCB" required /></label>
+          <label class="field"><span>Image URL</span><input id="product-image" type="url" /></label>
+          <label class="field"><span>Upload image</span><input id="product-image-upload" type="file" accept="image/*" /></label>
+          <label class="checkbox-field"><input id="product-trending" type="checkbox" /> <span>Trending product</span></label>
+        </div>
+        <div class="image-preview" id="product-image-preview"></div>
+        <div class="button-group">
+          <button class="button button-secondary" type="button" id="cancel-product-modal">Cancel</button>
+          <button class="button button-primary" type="submit">Save Product</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

@@ -3,43 +3,77 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WishTico Collections</title>
-    <meta name="description" content="Explore curated WishTico collections with premium shirts, t-shirts, pants, jackets, and exclusive combo offers." />
+    <title>WISHTICO Collections</title>
+    <meta name="description" content="Browse premium WISHTICO collections with luxury filters, wishlist, search, and quick add actions." />
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <link rel="stylesheet" href="assets/css/animations.css" />
-    <link rel="stylesheet" href="assets/css/splash.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body data-page="collections">
-    <div class="splash-screen" id="splashScreen" aria-hidden="true"><div class="splash-screen__inner"><div class="splash-screen__logo" aria-label="WishTico logo"><svg viewBox="0 0 220 180" role="img" aria-hidden="true"><g class="splash-fill"><path d="M14 30H40L57 121L81 30H104L128 121L145 30H171L144 150H116L92 70L68 150H40L14 30Z" /><path d="M118 30H210V54H177V150H151V54H118V30Z" /></g><g class="splash-outline"><path d="M14 30H40L57 121L81 30H104L128 121L145 30H171L144 150H116L92 70L68 150H40L14 30Z" /><path d="M118 30H210V54H177V150H151V54H118V30Z" /></g></svg></div><p class="splash-screen__brand">WishTico</p><p class="splash-screen__tagline">Style That Defines You</p><div class="splash-screen__loader"><span></span></div></div></div>
     <div data-site-header></div>
+    <div data-search-overlay></div>
     <main>
-      <section class="page-hero section-shell section-shell--muted"><div class="container reveal"><span class="eyebrow">Collections</span><h1>Curated pieces for elevated wardrobes</h1><p>Filter through signature layers, everyday luxuries, and special bundled edits crafted with premium details.</p></div></section>
-      <section class="section-shell" id="categories">
-        <div class="container catalog-shell">
-          <aside class="catalog-sidebar glass-panel reveal" aria-label="Product filters">
-            <div class="filter-group"><h3>Categories</h3><div id="filter-category-list"></div></div>
-            <div class="filter-group"><h3>Size</h3><div class="chip-group" id="size-filter-group"><button type="button" class="chip" data-size="S">S</button><button type="button" class="chip" data-size="M">M</button><button type="button" class="chip" data-size="L">L</button><button type="button" class="chip" data-size="XL">XL</button><button type="button" class="chip" data-size="XXL">XXL</button></div></div>
-            <div class="filter-group"><h3>Colours</h3><div class="swatch-group" id="color-filter-group"><button type="button" class="swatch" data-color="#111111" style="--swatch:#111111" aria-label="Black"></button><button type="button" class="swatch" data-color="#F5F1EA" style="--swatch:#F5F1EA" aria-label="Ivory"></button><button type="button" class="swatch" data-color="#6F7C59" style="--swatch:#6F7C59" aria-label="Olive"></button><button type="button" class="swatch" data-color="#32506D" style="--swatch:#32506D" aria-label="Navy"></button><button type="button" class="swatch" data-color="#8B5E3C" style="--swatch:#8B5E3C" aria-label="Tan"></button></div></div>
-            <div class="filter-group"><h3>Price Range</h3><label for="price-range" class="filter-caption">Up to <span id="price-range-value">₹2500</span></label><input id="price-range" type="range" min="400" max="2500" step="100" value="2500" /></div>
-            <div class="filter-actions"><button class="button button-primary" id="apply-filters" type="button">Apply</button><button class="button button-secondary" id="clear-filters" type="button">Clear</button></div>
+      <section class="page-hero page-hero--compact">
+        <div class="container reveal">
+          <div class="breadcrumb">Home / Collections</div>
+          <h1>Collections</h1>
+          <p>Luxury essentials, sharp silhouettes, and premium offer drops in one refined catalogue.</p>
+        </div>
+      </section>
+
+      <section class="section section--compact">
+        <div class="container catalog-layout">
+          <aside class="filter-card reveal">
+            <div class="filter-block">
+              <h3>Categories</h3>
+              <div class="filter-stack" id="category-filter-list"></div>
+            </div>
+            <div class="filter-block">
+              <h3>Size</h3>
+              <div class="chip-group" id="size-filter-group"></div>
+            </div>
+            <div class="filter-block">
+              <h3>Color</h3>
+              <div class="swatch-group" id="color-filter-group"></div>
+            </div>
+            <div class="filter-block">
+              <h3>Price range</h3>
+              <input id="price-range" type="range" min="499" max="4999" step="100" value="4999" />
+              <div class="range-output" id="price-range-output">Up to ₹4,999</div>
+            </div>
+            <div class="button-group button-group--stack">
+              <button class="button button-primary" id="apply-filters" type="button">Apply</button>
+              <button class="button button-secondary" id="clear-filters" type="button">Clear</button>
+            </div>
           </aside>
-          <div class="catalog-main">
-            <div class="catalog-toolbar reveal"><p><strong id="collection-count">0</strong> products available</p><label class="sort-box" for="collection-sort"><span>Sort By</span><select id="collection-sort"><option value="popular">Popular</option><option value="newest">Newest</option><option value="price-asc">Price: Low to High</option><option value="price-desc">Price: High to Low</option><option value="discount">Biggest Discount</option></select></label></div>
+
+          <div>
+            <div class="catalog-toolbar reveal">
+              <div>
+                <span class="eyebrow">Catalog</span>
+                <h2 id="collection-heading">All Products</h2>
+                <p><span id="collection-count">0</span> products available</p>
+              </div>
+              <label class="select-field">
+                <span>Sort by</span>
+                <select id="sort-select">
+                  <option value="popular">Popular</option>
+                  <option value="newest">Newest</option>
+                  <option value="price-asc">Price Low → High</option>
+                  <option value="price-desc">Price High → Low</option>
+                </select>
+              </label>
+            </div>
             <div class="product-grid" id="collection-grid"></div>
-            <nav class="pagination reveal" id="collection-pagination" aria-label="Collections pagination"></nav>
+            <div class="pagination" id="collection-pagination"></div>
           </div>
         </div>
       </section>
     </main>
     <div data-cart-drawer></div>
     <div data-site-footer></div>
-    <script src="assets/js/main.js" defer></script>
-    <script src="assets/js/splash.js" defer></script>
-    <script src="assets/js/cart.js" defer></script>
-    <script src="assets/js/products.js" defer></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>
