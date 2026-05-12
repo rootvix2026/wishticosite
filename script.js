@@ -898,7 +898,7 @@ function showOrderSuccess() {
 
 function passwordToggleSetup() {
   document.querySelectorAll('[data-password-toggle]').forEach((button) => button.addEventListener('click', () => {
-    const input = button.parentElement?.querySelector('input[type="password"], input[type="text"]');
+    const input = button.parentElement?.querySelector('input[name="password"]');
     if (!input) return;
     const reveal = input.type === 'password';
     input.type = reveal ? 'text' : 'password';
@@ -1044,17 +1044,17 @@ async function ensureAdmin() {
     return false;
   }
   let profile = null;
-  let profileLoadFailed = false;
+  let profileFetchFailed = false;
   try {
     profile = await getUserProfile(state.user.uid);
   } catch (error) {
-    profileLoadFailed = true;
+    profileFetchFailed = true;
     console.error('Failed to load admin profile.', error);
   }
   const resolvedUser = { ...state.user, ...(profile || {}) };
   state.user = resolvedUser;
   const hasAdminAccess = isAdminUser(resolvedUser);
-  if (profileLoadFailed) {
+  if (profileFetchFailed) {
     if (!hasAdminAccess) {
       showToast('We could not verify admin access right now. Please refresh and try again.');
       return false;
