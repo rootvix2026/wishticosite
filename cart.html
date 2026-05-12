@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WishTico Cart</title>
+    <meta name="description" content="Review your WishTico cart, apply offers, and proceed to a secure premium checkout experience." />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/splash.css" />
+  </head>
+  <body data-page="cart">
+    <div class="splash-screen" id="splashScreen" aria-hidden="true"><div class="splash-screen__inner"><div class="splash-screen__logo" aria-label="WishTico logo"><svg viewBox="0 0 220 180" role="img" aria-hidden="true"><g class="splash-fill"><path d="M14 30H40L57 121L81 30H104L128 121L145 30H171L144 150H116L92 70L68 150H40L14 30Z" /><path d="M118 30H210V54H177V150H151V54H118V30Z" /></g><g class="splash-outline"><path d="M14 30H40L57 121L81 30H104L128 121L145 30H171L144 150H116L92 70L68 150H40L14 30Z" /><path d="M118 30H210V54H177V150H151V54H118V30Z" /></g></svg></div><p class="splash-screen__brand">WishTico</p><p class="splash-screen__tagline">Style That Defines You</p><div class="splash-screen__loader"><span></span></div></div></div>
+    <div data-site-header></div>
+    <main>
+      <section class="page-hero section-shell section-shell--muted"><div class="container reveal"><span class="eyebrow">Cart</span><h1>Your curated WishTico selection</h1><p>Refine quantities, apply an offer code, and continue to a secure premium checkout flow.</p></div></section>
+      <section class="section-shell"><div class="container cart-page-layout"><div class="cart-page-items reveal" id="cart-page-items"></div><aside class="cart-summary-card glass-panel reveal"><h2>Order Summary</h2><label class="coupon-box" for="coupon-code"><span>Coupon Code</span><div class="coupon-box__row"><input id="coupon-code" type="text" placeholder="WISHTICO10" /><button class="button button-secondary" id="apply-coupon" type="button">Apply</button></div></label><dl class="summary-list"><div><dt>Subtotal</dt><dd id="cart-subtotal">₹0</dd></div><div><dt>Shipping</dt><dd>FREE</dd></div><div class="summary-total"><dt>Total</dt><dd id="cart-total">₹0</dd></div></dl><button class="button button-primary button-block" type="button">Proceed to Checkout</button></aside></div></section>
+    </main>
+    <div data-cart-drawer></div>
+    <div data-site-footer></div>
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/splash.js" defer></script>
+    <script src="assets/js/cart.js" defer></script>
+    <script src="assets/js/products.js" defer></script>
+  </body>
+</html>

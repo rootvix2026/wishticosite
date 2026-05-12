@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 220" role="img" aria-labelledby="title">
+  <title>WishTico logo lockup</title>
+  <g transform="translate(10 8)">
+    <path fill="#111111" d="M14 30H40L57 121L81 30H104L128 121L145 30H171L144 150H116L92 70L68 150H40L14 30Z"/>
+    <path fill="#111111" d="M118 30H210V54H177V150H151V54H118V30Z"/>
+  </g>
+  <text x="120" y="202" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="700" letter-spacing="2.5" fill="#111111">WishTico</text>
+</svg>
