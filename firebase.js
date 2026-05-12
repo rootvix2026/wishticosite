@@ -30,13 +30,14 @@ import { DEMO_CATEGORIES, DEMO_OFFERS, DEMO_PRODUCTS, DEMO_REVIEWS, DEMO_USERS }
 // TODO: Replace every field in this placeholder config with your own Firebase Web App config.
 // The site will automatically fall back to offline demo mode until real values are provided.
 const firebaseConfig = {
-  apiKey: 'REPLACE_WITH_YOUR_API_KEY',
-  authDomain: 'REPLACE_WITH_YOUR_AUTH_DOMAIN',
-  projectId: 'REPLACE_WITH_YOUR_PROJECT_ID',
-  storageBucket: 'REPLACE_WITH_YOUR_STORAGE_BUCKET',
-  messagingSenderId: 'REPLACE_WITH_YOUR_SENDER_ID',
-  appId: 'REPLACE_WITH_YOUR_APP_ID'
-};
+    apiKey: "AIzaSyAxkOD5frYF0GliSD2Yg4M4c3mUnyi3Zzg",
+    authDomain: "clothing-1a3ca.firebaseapp.com",
+    projectId: "clothing-1a3ca",
+    storageBucket: "clothing-1a3ca.firebasestorage.app",
+    messagingSenderId: "448871465779",
+    appId: "1:448871465779:web:64e6f56cee8f693ccef446",
+    measurementId: "G-C1LFBWRSK1"
+  };
 
 const DEMO_DB_KEY = 'wishtico-demo-db-v1';
 const DEMO_AUTH_KEY = 'wishtico-demo-auth-v1';
