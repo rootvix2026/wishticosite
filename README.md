@@ -1,3 +1,3 @@
 # WishTico
 
-Premium e-commerce clothing website. Site coming soon.
+Premium e-commerce clothing website. Coming soon.
